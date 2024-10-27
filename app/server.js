@@ -1,6 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+
+
+const mysql = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : '[USER]',
+  password : '[PASSWORD]',
+  database : 'ufclubwebsite'
+});
+
+
 const app = express();
 const bodyParser = require('body-parser')
 const port = 8080;
@@ -27,6 +38,15 @@ app.get('/', (req, res) => {
 
 app.get('/calendar/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public/calendar.png'))
+})
+
+app.get('/data/', (req, res) => {
+  connection.connect();
+  connection.query('SELECT * FROM Events', function (error, results, fields) {
+    if (error) res.send('error when retrieving data: ' + error.code);
+    res.send(results);
+  });
+  connection.end();
 })
 
 app.get('/calendar/current', (req, res) => {
