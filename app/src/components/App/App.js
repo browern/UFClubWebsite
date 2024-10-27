@@ -1,30 +1,29 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Dashboard from '../Dashboard/Dashboard';
-import Calendar from '../Calendar/Calendar';
-import Profile from '../Profile/Profile';
-import Login from '../Login/Login';
+import Navbar from '../navbar';
+import Dashboard from '../../pages/Dashboard/Dashboard';
+import Calendar from '../../pages/Calendar/Calendar';
+import Profile from '../../pages/Profile/Profile';
 import useToken from './useToken';
+import Home from '../../pages';
+import PrivateRoutes from './privateRoutes'
 
 function App() {
   const {token, setToken} = useToken()
 
-  if(!token) {
-    return <Login setToken={setToken} />
-  }
-
   return (
-    <div className="wrapper">
-      <h1>Application</h1>
       <BrowserRouter>
+      <Navbar />
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />}/>
+          <Route path="/" element={<Home />}/>
           <Route path="/calendar" element={<Calendar />}/>
-          <Route path="/profile" element={<Profile />}/>
+          <Route element={<PrivateRoutes token={token} setToken={setToken}/>}>
+            <Route path="/dashboard" element={<Dashboard />}/>
+            <Route path="/profile" element={<Profile />}/>
+          </Route>
         </Routes>
       </BrowserRouter>
-    </div>
   );
 }
 

@@ -1,5 +1,6 @@
 10/14/2024
-This is a test project for node. If node and express are installed, the project can be run using "node app.js" in a command window. The resulting website can be accessed at localhost:8080.
+
+This is a test project for node. If node and express are installed, the project can be run using "node server.js" in a command window. The resulting website can be accessed at localhost:3000.
 
 There are four subdirectories for testing:
 
