@@ -14,13 +14,20 @@ connection.connect();
 
 
 const app = express();
+const bodyParser = require('body-parser')
 const port = 8080;
 
 app.use(cors());
+app.use(bodyParser.json());
 
-app.use('/login', (req, res) => {
+app.post('/login', (req, res) => {
+  //TODO
+  const username = req.body.username
+  const password = req.body.password
+
+  //CURRENTLY FOR TESTING
   res.send({
-    token: 'test123'
+    token: true
   });
 });
 
