@@ -6,8 +6,8 @@ const path = require('path');
 const mysql = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
-  user     : 'admin',
-  password : 'internal_use_only',
+  user     : '[USER]',
+  password : '[PASSWORD]',
   database : 'ufclubwebsite'
 });
 
