@@ -3,13 +3,14 @@ const cors = require('cors');
 const path = require('path');
 
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 var connection = mysql.createConnection({
   host     : 'localhost',
-  user     : '[USER]',
+  user     : 'root',
   password : '[PASSWORD]',
   database : 'ufclubwebsite'
 });
+connection.connect();
 
 
 const app = express();
@@ -34,12 +35,10 @@ app.get('/calendar/', (req, res) => {
 })
 
 app.get('/data/', (req, res) => {
-  connection.connect();
   connection.query('SELECT * FROM Events', function (error, results, fields) {
     if (error) res.send('error when retrieving data: ' + error.code);
     res.send(results);
   });
-  connection.end();
 })
 
 app.get('/calendar/current', (req, res) => {
