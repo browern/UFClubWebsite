@@ -7,25 +7,25 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './index.css';
 
-// Referenced from: https://medium.com/@dhruvil_41022/how-to-make-reactjs-calendar-with-events-13bcea757525
-// Along with big-calendar documentation found here: https://jquense.github.io/react-big-calendar/examples/index.html?path=/story/about-big-calendar--page
-
 // Setups the localizer by providing the moment object
 const localizer = momentLocalizer(moment)
 
+// Where events are stored in DATE format
 const events = [
+  //single event named "test"
   {
     start: moment("2024-11-01 01:00:00").toDate(),
     end: moment("2024-11-01 04:00:00").toDate(),
-    title: "tester testing",
+    title: "test",
   }
 
 ];
 
+//Defines the main calendar and its functionallity
 export default function EventCalendar() {
   return <Calendar
   events={events}
   localizer={localizer}
   views={['month', 'week', 'day']}
-  style = {{height: 700, width: '60%'}} />
+  style = {{height: 600, width: '60%'}} />
 }; 
