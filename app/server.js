@@ -7,7 +7,7 @@ const mysql = require('mysql2');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : '[PASSWORD]',
+  password : 'UFiscool17$',
   database : 'ufclubwebsite'
 });
 connection.connect();
@@ -21,6 +21,17 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/login', (req, res) => {
+  //TODO
+  const username = req.body.username
+  const password = req.body.password
+
+  //CURRENTLY FOR TESTING
+  res.send({
+    token: true
+  });
+});
+
+app.post('/signup', (req, res) => {
   //TODO
   const username = req.body.username
   const password = req.body.password
