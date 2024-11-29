@@ -1,14 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-
-
 const mysql = require('mysql2');
+require('dotenv').config(); // Load environment variables
+
+
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'UFiscool17$',
-  database : 'ufclubwebsite'
+  host     : process.env.DB_HOST,
+  user     : process.env.DB_USER,
+  password : process.env.DB_PASSWORD,
+  database : process.env.DB_DATABASE
 });
 connection.connect();
 
@@ -69,7 +70,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/data/', (req, res) => {
-  connection.query('SELECT * FROM Events', function (error, results, fields) {
+  connection.query('SELECT * FROM events', function (error, results, fields) {
     if (error) res.send('error when retrieving data: ' + error.code);
     res.send(results);
   });
