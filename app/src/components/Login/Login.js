@@ -1,52 +1,134 @@
-import React, {useState} from 'react';
-import './Login.css';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import './Login.css';
 
 async function loginUser(credentials) {
-    return fetch('http://localhost:8080/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(credentials)
-    })
-      .then(data => data.json())
-   }
+  return fetch('http://localhost:8080/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  }).then(data => data.json());
+}
 
-export default function Login({ setToken }) {
-    const [username, setUserName] = useState();
-    const [password, setPassword] = useState();
+async function signupUser(credentials) {
+  return fetch('http://localhost:8080/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  }).then(data => data.json());
+}
 
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-          username,
-          password
-        });
-        setToken(token);
+export default function AuthForm({ setToken }) {
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      let response;
+      if (isLoginMode) {
+        response = await loginUser({ username, password });
+      } else {
+        response = await signupUser({ username, password, email });
       }
 
-    return(
+      if (response.token) {
+        setToken(response.token);
+      } else {
+        setError(response.message || 'Authentication failed');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    }
+  };
+
+  const toggleMode = () => {
+    setIsLoginMode(!isLoginMode);
+    // Reset form fields when switching modes
+    setUsername('');
+    setPassword('');
+    setEmail('');
+    setError('');
+  };
+
+  return (
     <div className="login-wrapper">
-        <h1>Please Log In</h1>
-        <form onSubmit={handleSubmit}>
+      <h1>{isLoginMode ? 'Please Log In' : 'Create an Account'}</h1>
+      <form onSubmit={handleSubmit}>
         <label>
-            <p>Username</p>
-            <input type="text" onChange={e => setUserName(e.target.value)}/>
+          <p>Username</p>
+          <input 
+            type="text" 
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            required
+          />
         </label>
+        
+        {!isLoginMode && (
+          <label>
+            <p>Email</p>
+            <input 
+              type="email" 
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+          </label>
+        )}
+        
         <label>
-            <p>Password</p>
-            <input type="password" onChange={e => setPassword(e.target.value)}/>
+          <p>Password</p>
+          <input 
+            type="password" 
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
         </label>
+
+        {error && (
+          <div style={{ color: 'red', marginTop: '10px' }}>
+            {error}
+          </div>
+        )}
+
         <div>
-            <button type="submit">Submit</button>
+          <button type="submit">
+            {isLoginMode ? 'Log In' : 'Sign Up'}
+          </button>
         </div>
-        </form>
+      </form>
+
+      <div style={{ marginTop: '15px' }}>
+        <button 
+          onClick={toggleMode}
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: 'blue', 
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
+        >
+          {isLoginMode 
+            ? 'Need an account? Sign Up' 
+            : 'Already have an account? Log In'}
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 
-Login.propTypes = {
-    setToken: PropTypes.func.isRequired
-}
-
+AuthForm.propTypes = {
+  setToken: PropTypes.func.isRequired
+};
