@@ -21,24 +21,41 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/login', (req, res) => {
-  //TODO
-  const username = req.body.username
-  const password = req.body.password
+  const username = req.body.username;
+  const password = req.body.password;
 
-  //CURRENTLY FOR TESTING
-  res.send({
-    token: true
+  connection.execute('SELECT `password` FROM `member_data` WHERE `username` = ?', [username], function (error, results, fields) {
+    if (error) res.send('error when retrieving data: ' + error.code);
+    if(password == results[0]['password']) {
+        res.send({
+           token: true
+        });
+    } else {
+        console.log(results);
+        res.send('Invalid password.');
+    }
   });
+  
 });
+
+app.post('/create_event', (req, res) => {
+  const event = [req.body.event_name, req.body.month, req.body.day, req.body.year, req.body.location, req.body.person_of_contact, req.body.start_time, req.body.end_time, req.body.points_awarded];
+
+  connection.execute('INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', event, function (error, results, fields) {
+    if (error) {
+       res.send('error when adding event: ' + error.code);
+       return;
+    }
+    res.send('Event added.');
+  });
+  
+});
+
 
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   res.send('Here is the home page')
-})
-
-app.get('/calendar/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/calendar.png'))
 })
 
 app.get('/data/', (req, res) => {
@@ -48,10 +65,6 @@ app.get('/data/', (req, res) => {
   });
 })
 
-app.get('/calendar/current', (req, res) => {
-  //Replace with actual data
-  res.json({events: [{month: "October", day: "28", name: "Sprint 1 Presentation", description: "TODO"}, {month: "October", day: "29", name: "Sprint 1 Party", description: "Get crazy!"}]})
-})
 
 app.get('/index/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public/index.html'));
