@@ -4,7 +4,6 @@ const path = require('path');
 const mysql = require('mysql2');
 require('dotenv').config(); // Load environment variables
 
-
 var connection = mysql.createConnection({
   host     : process.env.DB_HOST,
   user     : process.env.DB_USER,
@@ -70,7 +69,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/data/', (req, res) => {
-  connection.query('SELECT * FROM events', function (error, results, fields) {
+  connection.query('SELECT * FROM Events', function (error, results, fields) {
     if (error) res.send('error when retrieving data: ' + error.code);
     res.send(results);
   });
