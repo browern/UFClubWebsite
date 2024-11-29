@@ -38,6 +38,19 @@ app.post('/login', (req, res) => {
   
 });
 
+app.post('/register', (req, res) => {
+  const member = [req.body.username, req.body.password, req.body.first_name, req.body.last_name, req.body.year, req.body.email];
+
+  connection.execute('INSERT INTO member_data VALUES (?, ?, ?, ?, ?, ?)', member, function (error, results, fields) {
+    if (error) {
+       res.send('error when registering: ' + error.code);
+       return;
+    }
+    res.send('Registered.');
+  });
+  
+});
+
 app.post('/create_event', (req, res) => {
   const event = [req.body.event_name, req.body.month, req.body.day, req.body.year, req.body.location, req.body.person_of_contact, req.body.start_time, req.body.end_time, req.body.points_awarded];
 
