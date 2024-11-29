@@ -7,7 +7,7 @@ const mysql = require('mysql2');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : '[PASSWORD]',
+  password : 'UFiscool17$',
   database : 'ufclubwebsite'
 });
 connection.connect();
@@ -51,6 +51,16 @@ app.post('/create_event', (req, res) => {
   
 });
 
+app.post('/signup', (req, res) => {
+  //TODO
+  const username = req.body.username
+  const password = req.body.password
+
+  //CURRENTLY FOR TESTING
+  res.send({
+    token: true
+  });
+});
 
 app.use(express.static('public'))
 

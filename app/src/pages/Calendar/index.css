@@ -1,0 +1,9 @@
+.rbc-toolbar{
+    background:#96f2d7;
+    font-weight: bold;
+}
+
+/* Changes margins of big calendar */
+.rbc-calendar{
+    margin: 150px 0px 0px 0px;
+}
